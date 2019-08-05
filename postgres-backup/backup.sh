@@ -68,19 +68,19 @@ mkdir -p "${BACKUP_DIR}/daily/" "${BACKUP_DIR}/weekly/" "${BACKUP_DIR}/monthly/"
 for DB in ${POSTGRES_DBS}; do
   #Initialize filename vers
   DFILE="${BACKUP_DIR}/daily/${DB}-`date +%Y%m%d-%H%M%S`.sql.gz"
-  WFILE="${BACKUP_DIR}/weekly/${DB}-`date +%G%V`.sql.gz"
-  MFILE="${BACKUP_DIR}/monthly/${DB}-`date +%Y%m`.sql.gz"
+  # WFILE="${BACKUP_DIR}/weekly/${DB}-`date +%G%V`.sql.gz"
+  # MFILE="${BACKUP_DIR}/monthly/${DB}-`date +%Y%m`.sql.gz"
   #Create dump
   echo "Creating dump of ${DB} database from ${POSTGRES_HOST}..."
-  pg_dump -f "${DFILE}" ${POSTGRES_HOST_OPTS} ${DB}
+  pg_dump -f "${DFILE}" -U ${POSTGRES_USER} ${POSTGRES_HOST_OPTS} ${DB}
   #Copy (hardlink) for each entry
-  ln -vf "${DFILE}" "${WFILE}"
-  ln -vf "${DFILE}" "${MFILE}"
+  # ln -vf "${DFILE}" "${WFILE}"
+  # ln -vf "${DFILE}" "${MFILE}"
   #Clean old files
   echo "Cleaning older than ${KEEP_DAYS} days for ${DB} database from ${POSTGRES_HOST}..."
   find "${BACKUP_DIR}/daily" -maxdepth 1 -mtime +${KEEP_DAYS} -name "${DB}-*.sql*" -exec rm -rf '{}' ';'
-  find "${BACKUP_DIR}/weekly" -maxdepth 1 -mtime +${KEEP_WEEKS} -name "${DB}-*.sql*" -exec rm -rf '{}' ';'
-  find "${BACKUP_DIR}/monthly" -maxdepth 1 -mtime +${KEEP_MONTHS} -name "${DB}-*.sql*" -exec rm -rf '{}' ';'
+  # find "${BACKUP_DIR}/weekly" -maxdepth 1 -mtime +${KEEP_WEEKS} -name "${DB}-*.sql*" -exec rm -rf '{}' ';'
+  # find "${BACKUP_DIR}/monthly" -maxdepth 1 -mtime +${KEEP_MONTHS} -name "${DB}-*.sql*" -exec rm -rf '{}' ';'
 done
 
 echo "SQL backup uploaded successfully"

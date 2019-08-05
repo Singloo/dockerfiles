@@ -18,7 +18,6 @@ ENV BACKUP_KEEP_WEEKS 4
 ENV BACKUP_KEEP_MONTHS 6
 
 
-RUN mkdir -p /backups
 
 VOLUME /backups
 
