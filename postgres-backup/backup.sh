@@ -41,21 +41,16 @@ else
 fi
 
 # if [ "${POSTGRES_USER_FILE}" = "**None**" ]; then
-#   export PGUSER="${POSTGRES_USER}"
+export PGUSER="${POSTGRES_USER}"
 # elif [ -r "${POSTGRES_USER_FILE}" ]; then
 #   export PGUSER=$(cat "${POSTGRES_USER_FILE}")
 # else
 #   echo "Missing POSTGRES_USER_FILE file."
 #   exit 1
 # fi
-# if [ "${POSTGRES_PASSWORD_FILE}" = "**None**" ]; then
-#   export PGPASSWORD="${POSTGRES_PASSWORD}"
-# elif [ -r "${POSTGRES_PASSWORD_FILE}" ]; then
-#   export PGPASSWORD=$(cat "${POSTGRES_PASSWORD_FILE}")
-# else
-#   echo "Missing POSTGRES_PASSWORD_FILE file."
-#   exit 1
-# fi
+
+export PGPASSWORD="${POSTGRES_PASSWORD}"
+
 POSTGRES_HOST_OPTS="-h ${POSTGRES_HOST} -p ${POSTGRES_PORT} ${POSTGRES_EXTRA_OPTS}"
 KEEP_DAYS=${BACKUP_KEEP_DAYS}
 KEEP_WEEKS=`expr $(((${BACKUP_KEEP_WEEKS} * 7) + 1))`
@@ -72,7 +67,7 @@ for DB in ${POSTGRES_DBS}; do
   # MFILE="${BACKUP_DIR}/monthly/${DB}-`date +%Y%m`.sql.gz"
   #Create dump
   echo "Creating dump of ${DB} database from ${POSTGRES_HOST}..."
-  pg_dump -f "${DFILE}" -U ${POSTGRES_USER} ${POSTGRES_HOST_OPTS} ${DB}
+  pg_dump -f "${DFILE}" ${POSTGRES_HOST_OPTS} ${DB}
   #Copy (hardlink) for each entry
   # ln -vf "${DFILE}" "${WFILE}"
   # ln -vf "${DFILE}" "${MFILE}"
