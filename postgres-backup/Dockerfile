@@ -22,6 +22,6 @@ ENV BACKUP_KEEP_MONTHS 6
 VOLUME /backups
 
 ADD backup.sh /backup.sh
-
+RUN chmod a+x /backup.sh
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["exec /usr/local/bin/go-cron -s \"$SCHEDULE\" -- /backup.sh"]
