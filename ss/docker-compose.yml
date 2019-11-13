@@ -1,0 +1,12 @@
+version: '3'
+services:
+  ss:
+    image: shadowsocks/shadowsocks-libev:latest
+    container_name: ss
+    restart: always
+    environment:
+      - PASSWORD=password
+      - METHOD=aes-256-cfb
+    ports:
+      - '8090:8388'
+      - '8090:8388/udp'
